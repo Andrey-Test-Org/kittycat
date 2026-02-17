@@ -1,4 +1,5 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// Add test
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
     val name = "Cute"
