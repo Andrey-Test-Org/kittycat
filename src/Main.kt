@@ -1,15 +1,19 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// Add test
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-fun main() {
-    val name = "Cute"
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    println("Hello, " + name + " kitty!")
+fun fibonacci(n: Int): Long {
+    require(n >= 0) { "n must be non-negative" }
+    if (n < 2) return n.toLong()
+    var a = 0L
+    var b = 1L
+    for (i in 2..n) {
+        val next = a + b
+        a = b
+        b = next
+    }
+    return b
+}
 
-    for (i in 1..5) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        println("Hi, Kitty!")
+fun main(args: Array<String>) {
+    val count = args.firstOrNull()?.toIntOrNull() ?: 10
+    for (i in 0..count) {
+        println("fib($i) = ${fibonacci(i)}")
     }
 }
