@@ -3,6 +3,8 @@ fun sumToN(n: Int): Long {
     return n.toLong() * (n + 1) / 2
 }
 
+tailrec fun gcd(a: Long, b: Long): Long = if (b == 0L) kotlin.math.abs(a) else gcd(b, a % b)
+
 fun fibonacci(n: Int): Long {
     require(n >= 0) { "n must be non-negative" }
     if (n < 2) return n.toLong()
