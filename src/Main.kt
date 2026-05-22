@@ -3,7 +3,7 @@ fun fibonacci(n: Int): Long {
     if (n < 2) return n.toLong()
     var a = 0L
     var b = 1L
-    for (i in 2..n) {
+    (2..n).forEach { i ->
         val next = a + b
         a = b
         b = next
