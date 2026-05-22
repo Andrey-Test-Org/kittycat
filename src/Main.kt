@@ -1,3 +1,8 @@
+fun sumToN(n: Int): Long {
+    require(n >= 0) { "n must be non-negative" }
+    return n.toLong() * (n + 1) / 2
+}
+
 fun fibonacci(n: Int): Long {
     require(n >= 0) { "n must be non-negative" }
     if (n < 2) return n.toLong()
