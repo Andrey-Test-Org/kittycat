@@ -3,6 +3,18 @@ fun sumToN(n: Int): Long {
     return n.toLong() * (n + 1) / 2
 }
 
+fun isPrime(n: Long): Boolean {
+    if (n < 2) return false
+    if (n < 4) return true
+    if (n % 2 == 0L) return false
+    var i = 3L
+    while (i * i <= n) {
+        if (n % i == 0L) return false
+        i += 2
+    }
+    return true
+}
+
 fun fibonacci(n: Int): Long {
     require(n >= 0) { "n must be non-negative" }
     if (n < 2) return n.toLong()
