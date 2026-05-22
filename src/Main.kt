@@ -3,6 +3,13 @@ fun sumToN(n: Int): Long {
     return n.toLong() * (n + 1) / 2
 }
 
+fun factorial(n: Int): Long {
+    require(n >= 0) { "n must be non-negative" }
+    var result = 1L
+    for (i in 2..n) result *= i
+    return result
+}
+
 fun fibonacci(n: Int): Long {
     require(n >= 0) { "n must be non-negative" }
     if (n < 2) return n.toLong()
