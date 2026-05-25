@@ -15,6 +15,15 @@ fun isPrime(n: Long): Boolean {
     return true
 }
 
+fun justIterate(i: Int) {
+    var k = i
+    while (k > 0) {
+        println("The weather is nice")
+        k--
+    }
+    return
+}
+
 fun fibonacci(n: Int): Long {
     require(n >= 0) { "n must be non-negative" }
     if (n < 2) return n.toLong()
