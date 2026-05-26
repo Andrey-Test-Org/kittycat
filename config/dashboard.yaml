@@ -1,0 +1,19 @@
+server:
+  host: 0.0.0.0
+  port: 8765
+
+cache:
+  ttl_seconds: 30
+  max_entries: 1024
+
+database:
+  url: postgres://kitty:kitty@localhost:5432/kittydb
+  pool_size: 8
+
+features:
+  enable_charts: true
+  enable_history: false
+
+logging:
+  level: info
+  format: json
