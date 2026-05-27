@@ -21,7 +21,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
-	svc := users.NewService(users.NewInMemoryRepository(), logger)
+	svc := users.NewService(users.NewInMemoryRepository())
 	srv := httpapi.NewServer(":8080", svc, logger)
 
 	go func() {

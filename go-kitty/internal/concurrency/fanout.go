@@ -1,3 +1,5 @@
+// Package concurrency contains small, reusable helpers for running work
+// across goroutines with first-error semantics via errgroup.
 package concurrency
 
 import (
@@ -7,8 +9,12 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+// Task is a unit of asynchronous work returning a typed value and an error.
 type Task[T any] func(ctx context.Context) (T, error)
 
+// Fanout runs all tasks concurrently and returns their results in the same
+// order as the input. The first task error cancels the shared context and
+// causes Fanout to return that error, wrapped with the failing task index.
 func Fanout[T any](ctx context.Context, tasks []Task[T]) ([]T, error) {
 	results := make([]T, len(tasks))
 

@@ -1,3 +1,4 @@
+// Package token issues cryptographically random identifiers and API keys.
 package token
 
 import (
@@ -11,6 +12,7 @@ const (
 	idBytes     = 12
 )
 
+// NewAPIKey returns a hex-encoded 32-byte random API key sourced from crypto/rand.
 func NewAPIKey() (string, error) {
 	buf := make([]byte, apiKeyBytes)
 	if _, err := rand.Read(buf); err != nil {
@@ -19,10 +21,12 @@ func NewAPIKey() (string, error) {
 	return hex.EncodeToString(buf), nil
 }
 
-func NewID() string {
+// NewID returns a hex-encoded 12-byte random identifier sourced from crypto/rand.
+// Returns an error if the system entropy source is unavailable.
+func NewID() (string, error) {
 	buf := make([]byte, idBytes)
 	if _, err := rand.Read(buf); err != nil {
-		panic(fmt.Errorf("crypto/rand unavailable: %w", err))
+		return "", fmt.Errorf("read crypto/rand: %w", err)
 	}
-	return hex.EncodeToString(buf)
+	return hex.EncodeToString(buf), nil
 }

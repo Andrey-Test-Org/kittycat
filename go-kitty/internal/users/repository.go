@@ -6,22 +6,28 @@ import (
 	"sync"
 )
 
+// Repository is the storage contract the user Service depends on.
+// Implementations must be safe for concurrent use.
 type Repository interface {
 	Create(ctx context.Context, u User) error
 	Get(ctx context.Context, id string) (User, error)
 	List(ctx context.Context) ([]User, error)
 }
 
-type inMemoryRepo struct {
+// InMemoryRepository is a thread-safe in-process implementation of Repository,
+// intended for tests and local development.
+type InMemoryRepository struct {
 	mu   sync.RWMutex
 	data map[string]User
 }
 
-func NewInMemoryRepository() Repository {
-	return &inMemoryRepo{data: make(map[string]User)}
+// NewInMemoryRepository returns a new InMemoryRepository ready for use.
+func NewInMemoryRepository() *InMemoryRepository {
+	return &InMemoryRepository{data: make(map[string]User)}
 }
 
-func (r *inMemoryRepo) Create(ctx context.Context, u User) error {
+// Create stores a new user. Returns ErrAlreadyExists if the id is taken.
+func (r *InMemoryRepository) Create(ctx context.Context, u User) error {
 	if err := ctx.Err(); err != nil {
 		return fmt.Errorf("create user: %w", err)
 	}
@@ -34,7 +40,8 @@ func (r *inMemoryRepo) Create(ctx context.Context, u User) error {
 	return nil
 }
 
-func (r *inMemoryRepo) Get(ctx context.Context, id string) (User, error) {
+// Get returns the user with the given id. Returns ErrNotFound if absent.
+func (r *InMemoryRepository) Get(ctx context.Context, id string) (User, error) {
 	if err := ctx.Err(); err != nil {
 		return User{}, fmt.Errorf("get user: %w", err)
 	}
@@ -47,7 +54,8 @@ func (r *inMemoryRepo) Get(ctx context.Context, id string) (User, error) {
 	return u, nil
 }
 
-func (r *inMemoryRepo) List(ctx context.Context) ([]User, error) {
+// List returns all stored users in unspecified order.
+func (r *InMemoryRepository) List(ctx context.Context) ([]User, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, fmt.Errorf("list users: %w", err)
 	}

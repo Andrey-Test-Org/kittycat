@@ -3,17 +3,17 @@ package users
 import (
 	"context"
 	"errors"
-	"io"
-	"log/slog"
 	"testing"
 )
 
 func newTestService(t *testing.T) *Service {
 	t.Helper()
-	return NewService(NewInMemoryRepository(), slog.New(slog.NewTextHandler(io.Discard, nil)))
+	return NewService(NewInMemoryRepository())
 }
 
 func TestService_Register(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		email   string
@@ -22,10 +22,13 @@ func TestService_Register(t *testing.T) {
 		{name: "valid", email: "luna@example.com", wantErr: nil},
 		{name: "missing at", email: "lunaexample.com", wantErr: ErrInvalidEmail},
 		{name: "blank", email: "   ", wantErr: ErrInvalidEmail},
+		{name: "too long", email: longEmail(), wantErr: ErrInvalidEmail},
 	}
 
 	for _, tc := range tests {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			svc := newTestService(t)
 			_, err := svc.Register(context.Background(), tc.email)
 			if tc.wantErr == nil {
@@ -42,6 +45,8 @@ func TestService_Register(t *testing.T) {
 }
 
 func TestService_Get(t *testing.T) {
+	t.Parallel()
+
 	svc := newTestService(t)
 	created, err := svc.Register(context.Background(), "mochi@example.com")
 	if err != nil {
@@ -54,11 +59,15 @@ func TestService_Get(t *testing.T) {
 		wantErr error
 	}{
 		{name: "found", id: created.ID, wantErr: nil},
-		{name: "missing", id: "does-not-exist", wantErr: ErrNotFound},
+		{name: "missing", id: "deadbeefdeadbeefdeadbeef", wantErr: ErrNotFound},
+		{name: "invalid id empty", id: "", wantErr: ErrInvalidID},
+		{name: "invalid id non-hex", id: "not-a-hex-id", wantErr: ErrInvalidID},
 	}
 
 	for _, tc := range tests {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			_, err := svc.Get(context.Background(), tc.id)
 			if tc.wantErr == nil && err != nil {
 				t.Fatalf("Get: unexpected error: %v", err)
@@ -68,4 +77,12 @@ func TestService_Get(t *testing.T) {
 			}
 		})
 	}
+}
+
+func longEmail() string {
+	prefix := make([]byte, maxEmailLength)
+	for i := range prefix {
+		prefix[i] = 'a'
+	}
+	return string(prefix) + "@example.com"
 }

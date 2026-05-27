@@ -7,6 +7,8 @@ import (
 )
 
 func TestFanout(t *testing.T) {
+	t.Parallel()
+
 	sentinel := errors.New("boom")
 
 	tests := []struct {
@@ -35,7 +37,9 @@ func TestFanout(t *testing.T) {
 	}
 
 	for _, tc := range tests {
+		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := Fanout(context.Background(), tc.tasks)
 			if tc.wantErr != nil {
 				if !errors.Is(err, tc.wantErr) {
