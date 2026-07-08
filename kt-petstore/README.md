@@ -6,13 +6,28 @@ A Kotlin cat-adoption service backed by **Snowflake**. Manages shelters, breeds,
 
 ```
 kt-petstore/
+├── seed_data.sql                     # INSERT statements — 15-20 rows per table
 └── src/main/kotlin/petstore/
-    ├── Main.kt                    # entrypoint — demonstrates all 10 models + services
-    ├── model/Models.kt            # 10 data classes (one per table)
-    ├── db/Database.kt             # Snowflake JDBC connection + ResultSet helpers
-    ├── repository/Repositories.kt # 10 repository classes (CRUD via JDBC)
-    └── service/Services.kt        # 7 service classes with business logic
+    ├── Main.kt                       # entrypoint — demonstrates all 10 models + services
+    ├── model/Models.kt               # 10 data classes (one per table)
+    ├── db/Database.kt                # Snowflake JDBC connection + ResultSet helpers
+    ├── repository/Repositories.kt    # 10 repository classes (CRUD via JDBC)
+    └── service/Services.kt           # 7 service classes with business logic
 ```
+
+## Seed Data
+
+After running the DDL, populate all tables with sample data:
+
+```sql
+-- in a Snowflake worksheet:
+USE DATABASE TEST;
+USE SCHEMA PETSTORE;
+USE WAREHOUSE COMPUTE_WH;
+@seed_data.sql
+```
+
+Or paste the contents of `seed_data.sql` directly. Inserts 15-20 rows per table with consistent foreign key references.
 
 ## 10 Tables
 
@@ -52,6 +67,7 @@ Run this in a Snowflake worksheet. It creates the `PETSTORE` schema inside the *
 
 ```sql
 USE DATABASE TEST;
+USE WAREHOUSE COMPUTE_WH;
 
 CREATE SCHEMA IF NOT EXISTS PETSTORE;
 USE SCHEMA PETSTORE;
