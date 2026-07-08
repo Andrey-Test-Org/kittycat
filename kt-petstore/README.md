@@ -23,6 +23,7 @@ After running the DDL, populate all tables with sample data:
 -- in a Snowflake worksheet:
 USE DATABASE TEST;
 USE SCHEMA PETSTORE;
+USE WAREHOUSE COMPUTE_WH;
 @seed_data.sql
 ```
 
@@ -66,6 +67,7 @@ Run this in a Snowflake worksheet. It creates the `PETSTORE` schema inside the *
 
 ```sql
 USE DATABASE TEST;
+USE WAREHOUSE COMPUTE_WH;
 
 CREATE SCHEMA IF NOT EXISTS PETSTORE;
 USE SCHEMA PETSTORE;

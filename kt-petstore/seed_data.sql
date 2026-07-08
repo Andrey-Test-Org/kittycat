@@ -1,5 +1,6 @@
 USE DATABASE TEST;
 USE SCHEMA PETSTORE;
+USE WAREHOUSE COMPUTE_WH;
 
 -- 1. customers (15 rows)
 INSERT INTO customers (id, full_name, email, phone, address, created_at, updated_at) VALUES
