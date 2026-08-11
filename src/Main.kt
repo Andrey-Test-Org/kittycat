@@ -34,3 +34,11 @@ fun main(args: Array<String>) {
         println("fib($i) = ${fibonacci(i)}")
     }
 }
+
+fun addToEachForAll(vararg numbers: Int, addition: Int): Int {
+    var sum = 0
+    for (number in numbers) {
+        sum += number + addition
+    }
+    return sum
+}
